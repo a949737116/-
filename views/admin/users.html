@@ -1,0 +1,36 @@
+{% extends 'admin.html' %}
+{% block main %}
+    <ol class="breadcrumb">
+        <li><a href="/admin">欢迎页面</a></li>
+        <li class="active">用户管理</li>
+    </ol>
+    <table class="table table-hover table-bordered">
+        <tr>
+          <td>ID</td>
+          <td>用户名</td>
+          <td>密码</td>
+          <td>管理员权限</td>
+        </tr>
+        {% for user in users %}
+         <tr>
+           <td>
+             {{user.id}}
+           </td>
+           <td>
+             {{user.username}}
+           </td>
+           <td>
+             {{user.password}}
+           </td>
+           <td>
+              {% if user.isAdmin %}
+                是
+              {% else %}
+                否
+              {% endif %}
+           </td>
+         </tr>
+        {% endfor %}
+    </table>
+    {% include 'page.html' %}
+{% endblock %}

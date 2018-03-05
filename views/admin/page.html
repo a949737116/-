@@ -1,0 +1,21 @@
+<style>
+  .unable{
+    background-color: darkgray !important;
+    color: #fff;
+  }
+</style>
+<nav aria-label="...">
+  <ul class="pager" page="{{pageInfo.page}}">
+    {% if pageInfo.page === pageInfo.minPage %}
+        <li><a href="javascript:void(0)" class="unable">Previous</a></li>
+    {% else %}
+        <li><a href="?page={{pageInfo.page-1}}">Previous</a></li>
+    {% endif %}
+    <span class="text-danger">【共{{ pageInfo.totalCount }}条数据】当前第{{ pageInfo.page }}页/共{{ pageInfo.totalPages }}页</span>
+    {% if pageInfo.page === pageInfo.totalPages %}
+       <li><a href="javaScript:void(0)" class="unable">Next</a></li>
+    {% else %}
+        <li><a href="?page={{pageInfo.page+1}}">Next</a></li>
+    {% endif %}
+  </ul>
+</nav>

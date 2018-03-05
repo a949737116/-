@@ -1,0 +1,11 @@
+<!-- 继承模板 -->
+{% extends 'admin.html' %}
+{% block main %}
+    <div class="jumbotron">
+            <h1>您好，{{userInfo._username}}</h1>
+            <p>开始管理你的账户</p>
+            <p>
+                <a class="btn btn-primary btn-lg" href="#" role="button">开始管理</a>
+            </p>
+    </div>
+{% endblock %}
