@@ -1,0 +1,40 @@
+{% extends 'admin.html' %}
+{% block main %}
+    <ol class="breadcrumb">
+      <li><a href="/admin">欢迎页面</a></li>
+      <li><a href="/admin/categoryIndex">分类管理</a></li>
+      <li><a href="/admin/categoryAdd">增加分类</a></li>
+      <li class="active">增加分类结果</li>
+    </ol>
+    {% if code === -1 %}
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          添加失败！
+        </div>
+        <div class="panel-body">
+          {{ message }}
+        </div>
+        <div class="panel-footer"><a href="/admin/categoryAdd">重新添加分类</a></div>
+      </div>
+    {% elseif code === 0 %}
+    <div class="panel panel-warning">
+      <div class="panel-heading">
+        添加失败！
+      </div>
+      <div class="panel-body">
+        {{ message }}
+      </div>
+      <div class="panel-footer"><a href="/admin/categoryAdd">重新添加分类</a></div>
+    </div>
+    {% else %}
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        添加成功！
+      </div>
+      <div class="panel-body">
+        {{ message }}
+      </div>
+      <div class="panel-footer"><a href="/admin/categoryIndex">返回分类列表</a></div>
+    </div>
+    {% endif %}
+{% endblock%} 

@@ -19,6 +19,10 @@
         font-weight: 600;
         font-size: 22px;
     }
+    #topNav li:hover{
+        color: #555;
+        background-color: #e7e7e7;
+    }
 </style>
 <body>
     <nav class="navbar navbar-default" id="navbar">
@@ -33,21 +37,21 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav" id="topNav">
-                    <li >
+                    <li class="userAdmin">
                         <a href="/admin/users">用户管理
 
                         </a>
                     </li>
-                    <li class="dropdown">
+                    <li class="dropdown categoryAdmin">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">分类管理
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="#">分类首页</a>
+                                    <a href="/admin/categoryIndex">分类首页</a>
                                 </li>
                                 <li>
-                                    <a href="#">增加分类</a>
+                                    <a href="/admin/categoryAdd">增加分类</a>
                                 </li>
                             </ul>
                     </li>
@@ -75,10 +79,3 @@
     </div>
 </body>
 </html>
-<script>
-    $("#navbar").find("li").click(function(e){
-        e = e || window.event;
-        $("#navbar").find("li").removeClass("active");
-        $(e.currentTarget).addClass("active");
-    });
-</script>
