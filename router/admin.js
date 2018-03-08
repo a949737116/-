@@ -48,16 +48,23 @@ router.get('/categoryIndex',function(req,res,next){
   Category.count().then(function(num){
     pagesInfo.totalCount = num;
     console.log("一共有" + num + '种分类');
-    pagesInfo.totalPages = Math.ceil(num/pagesInfo.listNum);
-    pagesInfo.page = req.query.page || 0;
+    num === 0 ? pagesInfo.totalPages = 1 : pagesInfo.totalPages = Math.ceil(num/pagesInfo.listNum);
+    pagesInfo.page = req.query.page || 1;
     pagesInfo.page = Math.max(pagesInfo.minPage,pagesInfo.page);
     pagesInfo.page = Math.min(pagesInfo.page,pagesInfo.totalPages);
-    console.log(pagesInfo);
     Category.find().limit(pagesInfo.listNum).skip(pagesInfo.listNum * (pagesInfo.page-1)).then(function(data){
-      res.render('admin/categoryIndex',{
-        categoryData:data,
-        pageInfo:pagesInfo
-      });
+      if (!data){
+        res.render('admin/tip',{
+          message:"暂无分类，请先手动增加分类",
+          code:-1
+        });
+      }else{
+        var categoryList = data;
+        res.render('admin/categoryIndex',{
+          categoryData:data,
+          pageInfo:pagesInfo
+        });
+      }     
     });
   });
 });
@@ -65,7 +72,6 @@ router.get('/categoryAdd',function(req,res,next){
   res.render('admin/categoryAdd');
 });
 router.post('/categoryAdd',function(req,res,next){
-  console.log(req.body);
   var newCategoryName = req.body.CategoryName || '';
   var message;
   if (newCategoryName == ''){
@@ -77,11 +83,9 @@ router.post('/categoryAdd',function(req,res,next){
     return;
   };
   Category.findOne({categoryName:newCategoryName}).then(function(data){
-    console.log(data);
     if (!data){
       var newCategory = new Category({categoryName:newCategoryName});
       return newCategory.save().then(function(uData){
-        console.log(uData);
         message='新增分类成功';
         res.render('admin/tip',{
           message:message,
@@ -96,5 +100,32 @@ router.post('/categoryAdd',function(req,res,next){
       })
     }
   })
+});
+router.get('/category/delete',function(req,res,next){
+  console.log(req.query);
+  res.render('admin/categoryDelete',{id:req.query.cateId,cateName:req.query.cateName})
+});
+router.post('/category/delete',function(req,res,next){
+  console.log(req.body);
+  var deletedId = req.body.id;
+  var returnObject = {
+    code:0
+  };
+  Category.findOne({_id:deletedId}).then(function(data){
+    if (!data){
+      returnObject.code = -1;
+      res.json(returnObject);
+    }else{
+      Category.remove({_id:deletedId}).then(function(data){
+        console.log("已经删除");
+        returnObject.code = 1;
+        res.json(returnObject);
+      });
+    }
+  })
+});
+router.get('/category/change',function(req,res,next){
+  console.log(req.query.cateName);
+  res.render('admin/categoryChange',{id:req.query.cateId,cateName:req.query.cateName})
 });
 module.exports = router;

@@ -5,13 +5,22 @@
   <li class="active">分类列表</li>
 </ol>
 <table class="table table-striped">
-  <tr>
+  <tr class="info">
+    <td>分类ID</td>
     <td>分类名称</td>
+    <td>管理操作</td>
   </tr>
   {% for u in categoryData %}
   <tr>
     <td>
+      {{u.id}}
+    </td>
+    <td>
       {{u.categoryName}}
+    </td>
+    <td>
+      <a href="/admin/category/change?cateId={{u.id}}&cateName={{encodeURI(u.categoryName)}}">修改</a> |
+       <a href="/admin/category/delete?cateId={{u.id}}&cateName={{encodeURI(u.categoryName)}}">删除</a>
     </td>
   </tr>
   {% endfor %}
