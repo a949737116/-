@@ -128,4 +128,32 @@ router.get('/category/change',function(req,res,next){
   console.log(req.query.cateName);
   res.render('admin/categoryChange',{id:req.query.cateId,cateName:req.query.cateName})
 });
+router.post('/category/change',function(req,res,next){
+  var newCard = req.body.newCardName;
+  var cateId = req.query.cateId;
+  Category.findOne({_id:cateId}).then(function(data){
+    if (!data){
+      res.render('admin/tip',{
+        message:"该分类已经不存在，请重新查询分类列表",
+        code:-1
+      })
+    }else{
+      Category.findOne({categoryName:newCard}).then(function(data){
+        if (!data){
+          Category.update({_id:cateId},{categoryName:newCard}).then(function(){
+            res.render('admin/tip',{
+              message:"恭喜你成功修改分类名称",
+              code:1
+            })
+          })
+        }else{
+          res.render('admin/tip',{
+            message:"该分类名已经存在",
+            code:-1
+          })
+        }
+      })
+    }
+  })
+})
 module.exports = router;
