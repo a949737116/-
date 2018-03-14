@@ -1,0 +1,32 @@
+{% extends 'admin.html' %}
+{% block main %}
+<ol class="breadcrumb">
+  <li><a href="/admin">欢迎页面</a></li>
+  <li><a href="/admin/article/index">内容管理</a></li>
+  <li class="active">添加文章</li>
+</ol>
+<h3>添加文章</h3>
+<form method="POST">
+  <div class="form-group">
+      <label for="exampleInputEmail1" >文章分类</label>
+      <select class="form-control" name="typeId">
+          {% for u in data %}
+          <option value={{u.id}}>{{ u.categoryName }}</option> 
+          {% endfor %}
+        </select>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">文章名</label>
+    <input name="title" class="form-control" id="exampleInputEmail1" placeholder="请输入文章名字">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">文章简介</label>
+    <textarea name="abstract" id="" cols="30" rows="5" class="form-control"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">文章内容</label>
+    <textarea name="content" id="" cols="30" rows="10" class="form-control"></textarea>
+  </div>
+  <button type="submit" class="btn btn-default">添加</button>
+</form>
+{% endblock %}

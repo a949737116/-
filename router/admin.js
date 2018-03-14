@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/users');
 var Category = require('../models/category');
+var Article = require('../models/article');
 router.get('/',function(req,res,next){
   if (!req.userinfo.isAdmin){
     res.send("抱歉，您无管理员权限");
@@ -155,5 +156,92 @@ router.post('/category/change',function(req,res,next){
       })
     }
   })
-})
+});
+router.get('/article/index',function(req,res,next){
+  Article.find().populate('category').then(function(data){
+    //关联查询 https://www.cnblogs.com/wx1993/p/5262986.html
+    res.render('admin/articleIndex',{
+      content:data
+    })
+  });}
+);
+router.get('/article/add',function(req,res,next){
+  Category.find().then(function(data){
+    if (data) {
+      var categoryList = data;
+      res.render('admin/articleAdd',{
+        data:categoryList
+      });
+    }
+  });
+});
+router.post('/article/add',function(req,res,next){
+  var sendData = req.body;
+  console.log(sendData);
+  /*数据结构
+  { type: '5aa227150f80c8372ccfe7a7',
+  title: '123',
+  abstract: '23',
+  content: '213' }
+  */
+  return new Article({
+    title: sendData.title,
+    content: sendData.content,
+    description: sendData.abstract,
+    category:sendData.typeId
+  }).save().then(function(data){
+    console.log(data)
+    if (data){
+      var code = 1;
+      var message = '恭喜您成功添加文章';
+      res.render('admin/tip',{
+        code:code,
+        message:message
+      })
+    }else{
+
+    }
+  });
+});
+router.get('/article/update',function(req,res,next){
+  var oid = req.query.id || "";
+  console.log(oid);
+  Article.findOne({_id:oid}).then(function(data){
+    console.log(data);
+    if (!data){
+      res.json({message:"不存在这篇文章哦"})
+    }else{
+      Category.find().then(function(data1){
+        var odata = data1;
+        console.log(odata);
+        Article.findOne({_id:oid}).then(function(data){
+          if (!data){
+            res.json({message:"不存在这篇文章哦"})
+          }else{
+            res.render('admin/articleUpdate',{
+              mdata:data,
+              odata:odata
+            });
+            return Promise.reject();
+          }
+        })
+      });
+    }
+  })
+});
+router.get('/article/delete',function(req,res,next){
+  var oid = req.query.id || "";
+  console.log(oid);
+  Article.findOne({_id:oid}).then(function(data){
+    console.log(data)
+    if (!data){
+      res.json({message:"不存在这篇文章哦"})
+    }else{
+      Article.remove({_id:oid}).then(function(data){
+        res.json({message:"删除成功"});
+        return Promise.reject();
+      })
+    }
+  })
+});
 module.exports = router;

@@ -1,0 +1,37 @@
+{% extends 'admin.html' %}
+{% block main %}
+<ol class="breadcrumb">
+  <li><a href="/admin">欢迎页面</a></li>
+  <li class="active">文章列表</li>
+</ol>
+<div class="bs-example" data-example-id="simple-table">
+  <table class="table">
+    <caption>文章列表</caption>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>分类类型</th>
+        <th>文章标题</th>
+        <th>文章简介</th>
+        <th>文章内容</th>
+        <th>文章操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in content %}
+      <tr>
+        <th scope="row">{{c.id}}</th>
+        <td>{{c.category.categoryName}}</td>
+        <td>{{c.title}}</td>
+        <td>{{c.description}}</td>
+        <td>{{c.content}}</td>
+        <td>
+          <a href="/admin/article/update?id={{c.id}}">修改</a> | 
+          <a href="/admin/article/delete?id={{c.id}}">删除</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
