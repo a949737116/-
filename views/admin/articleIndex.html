@@ -1,10 +1,16 @@
 {% extends 'admin.html' %}
 {% block main %}
+<style>
+  td{
+    overflow-y: hidden;
+    width: 13%
+  }
+</style>
 <ol class="breadcrumb">
   <li><a href="/admin">欢迎页面</a></li>
   <li class="active">文章列表</li>
 </ol>
-<div class="bs-example" data-example-id="simple-table">
+<div class="bs-example table-responsive" data-example-id="simple-table">
   <table class="table">
     <caption>文章列表</caption>
     <thead>
@@ -14,6 +20,9 @@
         <th>文章标题</th>
         <th>文章简介</th>
         <th>文章内容</th>
+        <th>文章作者</th>
+        <th>创作时间</th>
+        <th>阅读量</th>  
         <th>文章操作</th>
       </tr>
     </thead>
@@ -23,8 +32,11 @@
         <th scope="row">{{c.id}}</th>
         <td>{{c.category.categoryName}}</td>
         <td>{{c.title}}</td>
-        <td>{{c.description}}</td>
-        <td>{{c.content}}</td>
+        <td>{{c.description.substring(0,10) + '...'}}</td>
+        <td>{{c.content.substring(0,20) + '...'}}</td>
+        <td>{{c.author.username}}</td>
+        <td>{{c.date | date('Y年m月d日H时m分s秒')}}</td>
+        <td>{{c.view}}</td>
         <td>
           <a href="/admin/article/update?id={{c.id}}">修改</a> | 
           <a href="/admin/article/delete?id={{c.id}}">删除</a>

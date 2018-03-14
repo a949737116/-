@@ -18,6 +18,21 @@ var articlesSchema = new Schema({
     //关联到categroy表
     type:mongoose.Schema.Types.ObjectId,
     ref:'Categorys'     
+  },
+  //作者
+  author:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'Users'
+  },
+  //阅读量
+  view:{
+    type:Number,
+    default:0
+  },
+  //创作时间
+  date:{
+    type:Date,
+    default:new Date()
   }
 });
 module.exports = articlesSchema;

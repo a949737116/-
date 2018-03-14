@@ -158,7 +158,7 @@ router.post('/category/change',function(req,res,next){
   })
 });
 router.get('/article/index',function(req,res,next){
-  Article.find().populate('category').then(function(data){
+  Article.find().populate(['category','author']).sort({'date':-1}).then(function(data){
     //关联查询 https://www.cnblogs.com/wx1993/p/5262986.html
     res.render('admin/articleIndex',{
       content:data
@@ -177,7 +177,7 @@ router.get('/article/add',function(req,res,next){
 });
 router.post('/article/add',function(req,res,next){
   var sendData = req.body;
-  console.log(sendData);
+  var userInfoId = req.userinfo._id;
   /*数据结构
   { type: '5aa227150f80c8372ccfe7a7',
   title: '123',
@@ -188,7 +188,8 @@ router.post('/article/add',function(req,res,next){
     title: sendData.title,
     content: sendData.content,
     description: sendData.abstract,
-    category:sendData.typeId
+    category:sendData.typeId,
+    author:userInfoId
   }).save().then(function(data){
     console.log(data)
     if (data){
@@ -244,4 +245,16 @@ router.get('/article/delete',function(req,res,next){
     }
   })
 });
+router.post('/article/update',function(req,res,next){
+  var oid = req.query.id || "";
+  console.log(oid);
+  var postData = req.body;
+  console.log(postData);
+  Article.update({_id:oid},{title:postData.title,description:postData.abstract,content:postData.content,category:postData.typeId}).then(function(){
+    res.render('admin/tip',{
+      message:"成功修改文章内容",
+      code:1
+    })
+  })
+})
 module.exports = router;
