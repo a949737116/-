@@ -39,21 +39,19 @@ router.get('/',function(req,res,next){
     //调整当前页
     IndexData.pageData.page = Math.max(IndexData.pageData.page ,1);
     IndexData.pageData.page  = Math.min(IndexData.pageData.page, IndexData.pageData.totalPageNum);
-    return Article.where(where).find().limit(IndexData.pageData.piece).skip((IndexData.pageData.page-1)*IndexData.pageData.piece).populate('author').sort({'date':-1});
-  }).then(function(data2){  
+    return Article.find({},{content:0}).where(where).limit(IndexData.pageData.piece).skip((IndexData.pageData.page-1)*IndexData.pageData.piece).populate('author').sort({'date':-1});
+  }).then(function(data2){
+    console.log(data2)  
     IndexData.articleData = data2;
     IndexData.userData = req.userinfo;
     //服务端渲染
     //console.log(IndexData.pageData);
-    return  res.render('main/index',{
+    return  res.render('main/index_index',{
         mainData:IndexData
     });
   });
 });
-
-
-
-
-
-
+router.get('/view',function(req,res,next){
+    
+});
 module.exports = router;
