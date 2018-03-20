@@ -33,6 +33,11 @@ var articlesSchema = new Schema({
   date:{
     type:Date,
     default:new Date()
+  },
+  //评论集合
+  comments:{
+    type:Array,
+    default:[]
   }
 });
 module.exports = articlesSchema;

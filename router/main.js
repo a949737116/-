@@ -52,6 +52,35 @@ router.get('/',function(req,res,next){
   });
 });
 router.get('/view',function(req,res,next){
-    
+    res.render('main/index_view',{
+      id:req.query.contentId,
+      userInfo:req.userinfo,
+      mainData:{userData:req.userinfo}
+    })
 });
-module.exports = router;
+router.post('/view',function(req,res,next){
+  var queryData = req.body; 
+  Article.findOne({_id:queryData.id}).populate('author').then(function(data){
+    data.date = data.date;
+      return res.json(data);
+      next();
+    });
+  })
+router.post('/view/addComments',function(req,res,next){
+  var queryData = req.body;
+  console.log(queryData); 
+  Article.findOne({_id:queryData.articleId}).then(function(data){
+    console.log(data);
+    data.comments.push({
+      date:req.body.date,
+      contents:req.body.contents,
+      author:req.body.author
+    });
+    data.save().then(function(){
+      res.json({
+        code:1
+      })
+    })
+  })
+  })
+module.exports = router;  
